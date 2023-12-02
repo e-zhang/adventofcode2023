@@ -31,12 +31,11 @@ func main() {
 		subsets := strings.Split(line, ":")[1]
 		sets := strings.Split(subsets, ";")
 
-		if part1(sets) {
-			possibles = append(possibles, id)
-		}
-
 		g, r, b := part2(sets)
 		powers = append(powers, g*r*b)
+		if g <= GREENS && r <= REDS && b <= BLUES {
+			possibles = append(possibles, id)
+		}
 	}
 
 	ids := 0
@@ -80,6 +79,7 @@ func part2(sets []string) (g, r, b int) {
 	return greens, reds, blues
 }
 
+/*
 func part1(sets []string) bool {
 	for _, set := range sets {
 		cubes := strings.Split(set, ",")
@@ -105,3 +105,4 @@ func part1(sets []string) bool {
 	}
 	return true
 }
+*/
