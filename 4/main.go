@@ -35,10 +35,10 @@ func main() {
 	}
 
 	fmt.Println(part1(cards))
-	fmt.Println(part2(cards))
+	fmt.Println(part2Recursive(cards), part2Iterative(cards))
 }
 
-func part2(cards []Card) int {
+func part2Recursive(cards []Card) int {
 	matching := make([]int, len(cards))
 
 	for i, c := range cards {
@@ -60,6 +60,23 @@ func countMatches(matching []int, i int) int {
 		sum += countMatches(matching, j)
 	}
 	return sum
+}
+
+func part2Iterative(cards []Card) int {
+	copies := make([]int, len(cards))
+	for i, c := range cards {
+		copies[i] += 1
+		matching := matches(c.numbers, c.winners)
+		for n := 1; n <= matching; n++ {
+			copies[i+n] += copies[i]
+		}
+	}
+
+	total := 0
+	for _, n := range copies {
+		total += n
+	}
+	return total
 }
 
 func parseNum(s string) []int {
@@ -102,7 +119,7 @@ func part1(cards []Card) int {
 			continue
 		}
 		points := 1
-		for i := 0; i < m-1; i++ {
+		for i := 1; i < m; i++ {
 			points *= 2
 		}
 		sum += points
