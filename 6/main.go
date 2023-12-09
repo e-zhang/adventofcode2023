@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -29,15 +30,16 @@ func main() {
 	}
 
 	ways := 1
+	waysQuad := 1
 	for i, t := range times {
 		dist := distances[i]
-		wins := calculateWins(t, dist)
-		ways *= wins
+		ways *= calculateWins(t, dist)
+		waysQuad *= calculateWinsQuadratic(t, dist)
 	}
-	fmt.Println(ways)
+	fmt.Println(ways, waysQuad)
 
 	fmt.Println(t2, d2)
-	fmt.Println(calculateWins(t2, d2))
+	fmt.Println(calculateWins(t2, d2), calculateWinsQuadratic(t2, d2))
 }
 
 func calculateWins(time, distance int) int {
@@ -50,6 +52,14 @@ func calculateWins(time, distance int) int {
 	}
 
 	return wins
+}
+
+func calculateWinsQuadratic(time, distance int) int {
+	// distance  = (hold * time - hold ^ 2)
+	// 0 = -hold^2 + hold * time - distance
+	x1, x2 := quadratic(-1, time, -1*distance)
+
+	return int(x2) - int(x1) + 1
 }
 
 func parseRace(s []string) ([]int, int) {
@@ -74,4 +84,12 @@ func parseRace(s []string) ([]int, int) {
 	}
 
 	return nums, val
+}
+
+func quadratic(a, b, c int) (float64, float64) {
+	x1 := (float64(-1*b) + math.Sqrt(float64(b*b-4*a*c))) / float64(2*a)
+	x2 := (float64(-1*b) - math.Sqrt(float64(b*b-4*a*c))) / float64(2*a)
+
+	return math.Floor(x1 + 1.0), math.Ceil(x2 - 1.0)
+	return x1, x2
 }
