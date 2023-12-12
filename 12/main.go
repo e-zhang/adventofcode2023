@@ -159,8 +159,6 @@ func doCombos(springs string, groups []int, seen map[string]int) int {
 		damaged := springs[:i] + "#" + springs[i+1:]
 		if isValid(damaged, groups) {
 			count := doCombos(damaged, groups, seen)
-			s, g = leftover(damaged, groups)
-			seen[Key{s, g}.String()] = count
 			valid += count
 		}
 	}
@@ -169,11 +167,10 @@ func doCombos(springs string, groups []int, seen map[string]int) int {
 		operational := springs[:i] + "." + springs[i+1:]
 		if isValid(operational, groups) {
 			count := doCombos(operational, groups, seen)
-			s, g = leftover(operational, groups)
-			seen[Key{s, g}.String()] = count
 			valid += count
 		}
 	}
+	seen[Key{s, g}.String()] = valid
 
 	return valid
 }
