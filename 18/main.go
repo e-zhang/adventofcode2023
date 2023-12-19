@@ -40,7 +40,6 @@ func main() {
 	border1 := map[Coord]struct{}{
 		curr1: struct{}{},
 	}
-	test := []Coord{curr1}
 	curr2 := Coord{0, 0}
 	border2 := []Coord{curr2}
 	scanner := bufio.NewScanner(f)
@@ -66,7 +65,6 @@ func main() {
 		for i := 0; i < cmd.steps; i++ {
 			curr1 = curr1.Add(d)
 			border1[curr1] = struct{}{}
-			test = append(test, curr1)
 		}
 
 		steps, err := strconv.ParseInt(cmd.color[:5], 16, 64)
@@ -97,10 +95,8 @@ func main() {
 		panic(curr2)
 	}
 	fmt.Println(len(border1), len(border2))
-	fill(border1)
-	part2Fill(border1)
-	// part2Range(border1)
-	part2Shoelace(test)
+	fillIn(border1)
+	fillOut(border1)
 	part2Shoelace(border2)
 }
 
@@ -133,7 +129,7 @@ func getMinMax(border map[Coord]struct{}) (int, int, int, int) {
 	return minR, maxR, minC, maxC
 }
 
-func fill(border map[Coord]struct{}) int {
+func fillIn(border map[Coord]struct{}) int {
 	minR, maxR, minC, maxC := getMinMax(border)
 
 	start := Coord{minR + (maxR-minR)/2, minC + (maxC-minC)/2}
@@ -187,7 +183,7 @@ func part2Shoelace(border []Coord) {
 	fmt.Println(sum, sum/2+int64(len(border))/2+1)
 }
 
-func part2Fill(border map[Coord]struct{}) {
+func fillOut(border map[Coord]struct{}) {
 	minR, maxR, minC, maxC := getMinMax(border)
 
 	start := Coord{minR - 1, minC - 1}
